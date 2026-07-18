@@ -294,15 +294,188 @@ export class SwarmAgent {
   }
 }
 
+// ── PDF Generator via styled print popup ──────────────────────────────────────
+const buildPdfHtml = (data: any): string => {
+  const now = new Date().toLocaleString();
+  const rows = Object.entries(data)
+    .map(([k, v]) => {
+      const key = k.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase());
+      return `<tr><td>${key}</td><td><strong>${v ?? '—'}</strong></td></tr>`;
+    })
+    .join('');
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Veilon Maintenance Report</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #fff; color: #1e293b; font-size: 13px; }
+    .page { max-width: 800px; margin: 0 auto; padding: 40px; }
+
+    /* Header */
+    .header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 3px solid #2563eb; padding-bottom: 20px; margin-bottom: 28px; }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand-icon { width: 42px; height: 42px; background: linear-gradient(135deg, #2563eb, #4f46e5); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .brand-icon svg { width: 22px; height: 22px; fill: #fff; }
+    .brand-name { font-size: 22px; font-weight: 900; color: #0f172a; letter-spacing: -0.5px; }
+    .brand-sub  { font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
+    .meta { text-align: right; font-size: 10px; color: #64748b; line-height: 1.8; }
+    .meta .report-id { font-size: 13px; font-weight: 700; color: #2563eb; }
+
+    /* Status badge */
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 100px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; background: #dcfce7; color: #166534; border: 1px solid #86efac; margin-bottom: 20px; }
+
+    /* Section title */
+    .section-title { font-size: 10px; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin: 24px 0 8px; }
+
+    /* Data table */
+    table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
+    tr { border-bottom: 1px solid #f1f5f9; }
+    tr:last-child { border-bottom: none; }
+    td { padding: 9px 12px; font-size: 12px; }
+    td:first-child { color: #64748b; width: 40%; font-weight: 500; }
+    td:last-child { color: #0f172a; }
+    tbody tr:nth-child(odd) { background: #f8fafc; }
+
+    /* AI confidence bar */
+    .conf-bar { height: 6px; border-radius: 100px; background: #e2e8f0; margin-top: 4px; }
+    .conf-fill { height: 100%; border-radius: 100px; background: linear-gradient(90deg, #2563eb, #10b981); }
+
+    /* Footer */
+    .footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 10px; color: #94a3b8; }
+
+    /* Print */
+    @media print {
+      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .no-print { display: none; }
+    }
+
+    /* Print button */
+    .print-btn { display: block; margin: 0 auto 28px; padding: 10px 28px; background: linear-gradient(135deg,#2563eb,#4f46e5); color:#fff; border:none; border-radius:8px; font-size:13px; font-weight:700; cursor:pointer; letter-spacing:0.3px; }
+    .print-btn:hover { opacity: 0.92; }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Print Button (hidden when printing) -->
+  <button class="print-btn no-print" onclick="window.print()">⬇ Save / Print PDF</button>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="brand">
+      <div class="brand-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+      </div>
+      <div>
+        <div class="brand-name">Veilon</div>
+        <div class="brand-sub">AI Operations Platform</div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="report-id">${data.reportId || 'RPT-' + Date.now()}</div>
+      <div>Generated: ${now}</div>
+      <div>Classification: INTERNAL — CONFIDENTIAL</div>
+      <div>Facility: FAC-DETROIT-02</div>
+    </div>
+  </div>
+
+  <div class="badge">✓ Maintenance Completed &amp; Verified</div>
+
+  <div class="section-title">Incident Summary</div>
+  <table>
+    <tbody>
+      <tr><td>Incident ID</td><td><strong>${data.incidentId || '—'}</strong></td></tr>
+      <tr><td>Device ID</td><td><strong>${data.deviceId || '—'}</strong></td></tr>
+      <tr><td>Device Name</td><td><strong>${data.deviceName || '—'}</strong></td></tr>
+      <tr><td>Device Type</td><td>${data.deviceType || 'Industrial Module'}</td></tr>
+      <tr><td>Assigned Engineer</td><td>${data.engineerName || '—'}</td></tr>
+      <tr><td>Maintenance Date</td><td>${data.maintenanceDate || '—'}</td></tr>
+      <tr><td>Completion Time</td><td>${data.completionTime || now}</td></tr>
+    </tbody>
+  </table>
+
+  <div class="section-title">Technical Analysis</div>
+  <table>
+    <tbody>
+      <tr><td>Root Cause</td><td>${data.rootCauseAnalysis || '—'}</td></tr>
+      <tr><td>Expected Downtime</td><td>${data.expectedDowntime || '—'}</td></tr>
+      <tr><td>Actual Downtime</td><td>${data.actualDowntime || '—'}</td></tr>
+      <tr><td>Components Replaced</td><td>${data.componentsReplaced || 'None'}</td></tr>
+      <tr><td>Sensor Readings Before</td><td>${data.sensorReadingsBefore || '—'}</td></tr>
+      <tr><td>Sensor Readings After</td><td>${data.sensorReadingsAfter || '—'}</td></tr>
+    </tbody>
+  </table>
+
+  <div class="section-title">AI Prediction Confidence</div>
+  <table>
+    <tbody>
+      <tr>
+        <td>Prediction Accuracy</td>
+        <td>
+          <strong>${data.aiConfidence || 0}%</strong>
+          <div class="conf-bar"><div class="conf-fill" style="width:${data.aiConfidence || 0}%"></div></div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="footer">
+    <span>Veilon AI Operations Platform · v2.4.0-LTS</span>
+    <span>Report generated by AI Swarm — ${now}</span>
+    <span>CONFIDENTIAL</span>
+  </div>
+
+</div>
+</body>
+</html>`;
+};
+
 // 4. REPORT EXPORTERS
 export const handleReportExport = (type: 'PDF' | 'CSV' | 'JSON', data: any) => {
-  const fileContent = JSON.stringify(data, null, 2);
-  const blob = new Blob([fileContent], { type: 'application/json' });
+  if (type === 'PDF') {
+    // Open styled HTML in a new window → user clicks "Save as PDF" or browser print dialog
+    const html = buildPdfHtml(data);
+    const win = window.open('', '_blank', 'width=900,height=700');
+    if (win) {
+      win.document.open();
+      win.document.write(html);
+      win.document.close();
+      // Auto-trigger print after content loads
+      win.onload = () => {
+        setTimeout(() => win.print(), 400);
+      };
+    }
+    return;
+  }
+
+  if (type === 'CSV') {
+    const rows = [Object.keys(data), Object.values(data)];
+    const csvContent = rows.map(r => r.map(v => `"${String(v ?? '').replace(/"/g, '""')}"`).join(',')).join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `veilon_report_${data.reportId || Date.now()}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    return;
+  }
+
+  // JSON fallback
+  const jsonStr = JSON.stringify(data, null, 2);
+  const blob = new Blob([jsonStr], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = `sentinel_summary_report.${type.toLowerCase()}`;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `veilon_report_${data.reportId || Date.now()}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 };
+

@@ -87,8 +87,138 @@ export const Analytics: React.FC = () => {
     .slice(0, 5);
 
   const handleExport = (format: string) => {
-    alert(`Exporting executive health analytics summary report to ${format}...`);
+    if (format === 'PDF') {
+      const now = new Date().toLocaleString();
+      const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Veilon Analytics Report</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:#fff;color:#1e293b;font-size:13px}
+    .page{max-width:820px;margin:0 auto;padding:40px}
+    .header{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #2563eb;padding-bottom:20px;margin-bottom:28px}
+    .brand-icon{width:40px;height:40px;background:linear-gradient(135deg,#2563eb,#4f46e5);border-radius:10px;display:flex;align-items:center;justify-content:center}
+    .brand-icon svg{width:20px;height:20px;fill:#fff}
+    .brand{display:flex;align-items:center;gap:12px}
+    .brand-name{font-size:21px;font-weight:900;color:#0f172a;letter-spacing:-0.5px}
+    .brand-sub{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+    .meta{text-align:right;font-size:10px;color:#64748b;line-height:1.9}
+    .section-title{font-size:10px;font-weight:800;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;margin:24px 0 10px;border-bottom:1px solid #f1f5f9;padding-bottom:6px}
+    table{width:100%;border-collapse:collapse;margin-bottom:20px}
+    tr{border-bottom:1px solid #f1f5f9}
+    td,th{padding:9px 12px;font-size:12px;text-align:left}
+    th{background:#f8fafc;font-weight:700;color:#475569;font-size:10px;text-transform:uppercase;letter-spacing:0.5px}
+    tbody tr:hover{background:#f8fafc}
+    .kpi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
+    .kpi-card{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:14px}
+    .kpi-label{font-size:9px;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
+    .kpi-value{font-size:20px;font-weight:900;color:#0f172a}
+    .kpi-trend{font-size:9px;color:#10b981;margin-top:2px;font-weight:600}
+    .footer{margin-top:36px;padding-top:14px;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;font-size:10px;color:#94a3b8}
+    .print-btn{display:block;margin:0 auto 28px;padding:10px 28px;background:linear-gradient(135deg,#2563eb,#4f46e5);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer}
+    @media print{.no-print{display:none}body{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+  </style>
+</head>
+<body>
+<div class="page">
+  <button class="print-btn no-print" onclick="window.print()">⬇ Save / Print PDF</button>
+  <div class="header">
+    <div class="brand">
+      <div class="brand-icon"><svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg></div>
+      <div><div class="brand-name">Veilon</div><div class="brand-sub">AI Operations Platform</div></div>
+    </div>
+    <div class="meta">
+      <div style="font-size:14px;font-weight:700;color:#2563eb">Enterprise Analytics Report</div>
+      <div>Generated: ${now}</div>
+      <div>Period: ${timeFilter.charAt(0).toUpperCase() + timeFilter.slice(1)}</div>
+      <div>Facility: FAC-DETROIT-02 · CONFIDENTIAL</div>
+    </div>
+  </div>
+
+  <div class="section-title">Key Performance Indicators</div>
+  <div class="kpi-grid">
+    ${kpis.map(k => `<div class="kpi-card"><div class="kpi-label">${k.title}</div><div class="kpi-value">${k.value}</div><div class="kpi-trend">${k.pct} · ${k.trend}</div></div>`).join('')}
+  </div>
+
+  <div class="section-title">Device Health Summary</div>
+  <table>
+    <thead><tr><th>Status</th><th>Count</th><th>Percentage</th></tr></thead>
+    <tbody>
+      <tr><td>✅ Healthy</td><td>${systemStats.healthy}</td><td>${((systemStats.healthy/systemStats.total)*100).toFixed(1)}%</td></tr>
+      <tr><td>⚠️ Warning</td><td>${systemStats.warning}</td><td>${((systemStats.warning/systemStats.total)*100).toFixed(1)}%</td></tr>
+      <tr><td>🔴 Critical</td><td>${systemStats.critical}</td><td>${((systemStats.critical/systemStats.total)*100).toFixed(1)}%</td></tr>
+      <tr><td>🔧 Maintenance Due</td><td>${systemStats.maintenanceDue}</td><td>${((systemStats.maintenanceDue/systemStats.total)*100).toFixed(1)}%</td></tr>
+      <tr><td><strong>Total Devices</strong></td><td><strong>${systemStats.total}</strong></td><td>100%</td></tr>
+    </tbody>
+  </table>
+
+  <div class="section-title">Incident Overview</div>
+  <table>
+    <thead><tr><th>Metric</th><th>Value</th></tr></thead>
+    <tbody>
+      <tr><td>Total Alerts</td><td>${alerts.length}</td></tr>
+      <tr><td>Active Alerts</td><td>${alerts.filter(a=>a.status==='active').length}</td></tr>
+      <tr><td>Resolved</td><td>${alerts.filter(a=>a.status==='resolved').length}</td></tr>
+      <tr><td>Open Tickets</td><td>${tickets.filter((t:any)=>t.status!=='completed').length}</td></tr>
+      <tr><td>System Health Score</td><td>${systemHealth}%</td></tr>
+      <tr><td>Estimated Uptime</td><td>99.88%</td></tr>
+      <tr><td>Avg Resolution Time (MTTR)</td><td>84 min</td></tr>
+    </tbody>
+  </table>
+
+  <div class="footer">
+    <span>Veilon AI Operations Platform · v2.4.0-LTS</span>
+    <span>Generated: ${now}</span>
+    <span>CONFIDENTIAL</span>
+  </div>
+</div>
+</body>
+</html>`;
+
+      const win = window.open('', '_blank', 'width=920,height=720');
+      if (win) {
+        win.document.open();
+        win.document.write(html);
+        win.document.close();
+        win.onload = () => setTimeout(() => win.print(), 400);
+      }
+      return;
+    }
+
+    if (format === 'CSV') {
+      const rows = [
+        ['Metric', 'Value', 'Trend', 'Change'],
+        ...kpis.map(k => [k.title, String(k.value), k.trend, k.pct]),
+        [],
+        ['Status', 'Count'],
+        ['Healthy', String(systemStats.healthy)],
+        ['Warning', String(systemStats.warning)],
+        ['Critical', String(systemStats.critical)],
+        ['Maintenance Due', String(systemStats.maintenanceDue)],
+        ['Total', String(systemStats.total)],
+        [],
+        ['System Health Score', `${systemHealth}%`],
+        ['Uptime', '99.88%'],
+        ['MTTR', '84 min'],
+        ['Total Alerts', String(alerts.length)],
+        ['Active Alerts', String(alerts.filter(a => a.status === 'active').length)],
+        ['Resolved Alerts', String(alerts.filter(a => a.status === 'resolved').length)],
+      ];
+      const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `veilon_analytics_${new Date().toISOString().split('T')[0]}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
   };
+
 
   return (
     <div className="space-y-6">
