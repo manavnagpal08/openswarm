@@ -1,32 +1,40 @@
-# React + TypeScript + Vite
+# Open Swarm Project
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Welcome to the **Open Swarm Project**! This project is a modern web application built with React, TypeScript, Vite, and Tailwind CSS. It features a responsive and aesthetic dashboard for managing devices, alerts, and analytics.
 
-Currently, two official plugins are available:
+## Features & Pages
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Here are the links to the main pages of the application:
 
-## React Compiler
+*   [Dashboard](src/pages/Dashboard.tsx) - The main overview page.
+*   [Device Operations (DeviceOps)](src/pages/DeviceOps.tsx) - Manage and monitor connected devices.
+*   [Alerts](src/pages/Alerts.tsx) - View and handle system alerts and notifications.
+*   [Analytics](src/pages/Analytics.tsx) - Data visualization and insights.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Getting Started
 
-## Expanding the Oxlint configuration
+### Prerequisites
+Make sure you have Node.js installed on your machine.
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+### Installation
+1. Clone the repository (if you haven't already).
+2. Install the dependencies:
+   ```bash
+   npm install
+   ```
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+### Running Locally
+To start the development server, run:
+```bash
+npm run dev
 ```
+You can view the application in your browser at [http://localhost:5173](http://localhost:5173).
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## Tech Stack
+*   **Core:** React 19, TypeScript
+*   **Build Tool:** Vite
+*   **Styling:** Tailwind CSS (v4)
+*   **Routing:** React Router DOM
+*   **Icons:** Lucide React
+*   **Charts:** Recharts
+*   **Animations:** Framer Motion
