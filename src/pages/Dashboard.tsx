@@ -141,16 +141,17 @@ export const Dashboard: React.FC = () => {
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={chartHistory}>
                 <XAxis dataKey="time" tick={{ fill: '#64748b', fontSize: 8 }} stroke="#f1f5f9" />
-                <YAxis tick={{ fill: '#64748b', fontSize: 8 }} stroke="#f1f5f9" />
+                <YAxis yAxisId="left" tick={{ fill: '#64748b', fontSize: 8 }} stroke="#f1f5f9" />
+                <YAxis yAxisId="right" orientation="right" tick={{ fill: '#64748b', fontSize: 8 }} stroke="#f1f5f9" />
                 <Tooltip />
                 <Legend wrapperStyle={{ fontSize: 9, fontFamily: 'monospace' }} />
                 
-                <Area type="monotone" name="Temp (°C)" dataKey="temperature" stroke="#2563eb" fill="none" strokeWidth={1.5} />
-                <Area type="monotone" name="Pressure (bar)" dataKey="pressure" stroke="#8b5cf6" fill="none" strokeWidth={1.5} />
-                <Area type="monotone" name="Vibration (mm/s)" dataKey="vibration" stroke="#22c55e" fill="none" strokeWidth={1.5} />
+                <Area yAxisId="left" type="monotone" name="Temp (°C)" dataKey="temperature" stroke="#2563eb" fill="none" strokeWidth={1.8} />
+                <Area yAxisId="right" type="monotone" name="Pressure (bar)" dataKey="pressure" stroke="#8b5cf6" fill="none" strokeWidth={1.8} />
+                <Area yAxisId="right" type="monotone" name="Vibration (mm/s)" dataKey="vibration" stroke="#22c55e" fill="none" strokeWidth={1.8} />
                 
                 {/* Threshold Markers */}
-                <ReferenceLine y={80} stroke="#ef4444" strokeDasharray="3 3" label={{ value: 'Critical Threshold', fill: '#ef4444', fontSize: 8 }} />
+                <ReferenceLine yAxisId="left" y={80} stroke="#ef4444" strokeDasharray="3 3" label={{ value: 'Critical Threshold', fill: '#ef4444', fontSize: 8 }} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -167,12 +168,13 @@ export const Dashboard: React.FC = () => {
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={chartHistory}>
                 <XAxis dataKey="time" tick={{ fill: '#64748b', fontSize: 8 }} stroke="#f1f5f9" />
-                <YAxis tick={{ fill: '#64748b', fontSize: 8 }} stroke="#f1f5f9" />
+                <YAxis yAxisId="left" tick={{ fill: '#64748b', fontSize: 8 }} stroke="#f1f5f9" />
+                <YAxis yAxisId="right" orientation="right" tick={{ fill: '#64748b', fontSize: 8 }} stroke="#f1f5f9" />
                 <Tooltip />
                 <Legend wrapperStyle={{ fontSize: 9, fontFamily: 'monospace' }} />
 
-                <Area type="monotone" name="Power (kW)" dataKey="powerConsumption" stroke="#ec4899" fill="none" strokeWidth={1.5} />
-                <Area type="monotone" name="Humidity (%)" dataKey="humidity" stroke="#f59e0b" fill="none" strokeWidth={1.5} />
+                <Area yAxisId="left" type="monotone" name="Power (kW)" dataKey="powerConsumption" stroke="#ec4899" fill="none" strokeWidth={1.8} />
+                <Area yAxisId="right" type="monotone" name="Humidity (%)" dataKey="humidity" stroke="#f59e0b" fill="none" strokeWidth={1.8} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
