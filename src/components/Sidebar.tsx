@@ -326,9 +326,6 @@ const StatusStrip: React.FC<{ criticalCount: number; healthy: number; total: num
       <span style={{ fontSize: 10, fontWeight: 700, color: isCritical ? '#dc2626' : '#16a34a', flex: 1 }}>
         {isCritical ? `${criticalCount} Critical Alert${criticalCount > 1 ? 's' : ''}` : 'All Systems Nominal'}
       </span>
-      <span style={{ fontSize: 9, fontFamily: 'monospace', color: '#94a3b8', fontWeight: 600 }}>
-        {healthy}/{total} ✓
-      </span>
     </motion.div>
   );
 };
