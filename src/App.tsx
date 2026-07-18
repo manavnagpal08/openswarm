@@ -25,17 +25,14 @@ export const App: React.FC = () => {
   return (
     <BrowserRouter>
       <SimulationProvider>
-        <div className="flex min-h-screen bg-primary">
-          {/* Left Sidebar Layout */}
+        <div style={{ display: 'flex', height: '100vh', overflow: 'hidden', background: '#FAFBFC' }}>
+          {/* Left Sidebar — sticky, never clipped */}
           <Sidebar collapsed={sidebarCollapsed} setCollapsed={setSidebarCollapsed} />
 
-          {/* Core Body Container */}
-          <div className="flex-1 flex flex-col min-w-0">
-            {/* Top Navigation Layout */}
+          {/* Right body — scrolls independently */}
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, overflow: 'hidden' }}>
             <TopNav />
-
-            {/* Main Content Area */}
-            <main className="flex-1 p-6 overflow-y-auto relative">
+            <main style={{ flex: 1, overflowY: 'auto', padding: '24px', position: 'relative' }}>
               <Routes>
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/digital-twin" element={<DigitalTwin />} />
@@ -53,7 +50,7 @@ export const App: React.FC = () => {
           </div>
         </div>
 
-        {/* Floating AI copilot & Alarm system */}
+        {/* Floating overlays */}
         <AiAssistant />
         <FloatingAlerts />
       </SimulationProvider>
