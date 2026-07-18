@@ -47,7 +47,7 @@ export const DeviceOps: React.FC = () => {
     <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 h-full">
       
       {/* LEFT COLUMN: DEVICES GRID VIEW */}
-      <div className="bg-white border border-slate-200 rounded-2xl flex flex-col h-[calc(100vh-170px)] overflow-hidden shadow-sm">
+      <div className="bg-white border border-slate-200 rounded-2xl flex flex-col h-[60vh] xl:h-[calc(100vh-170px)] overflow-hidden shadow-sm">
         
         {/* Filters Header */}
         <div className="p-4 border-b border-slate-100 space-y-3 bg-slate-50/50">
@@ -142,7 +142,7 @@ export const DeviceOps: React.FC = () => {
       </div>
 
       {/* RIGHT 2 COLUMNS: DETAILED exploded ANATOMY VIEW */}
-      <div className="xl:col-span-2 bg-white border border-slate-200 rounded-2xl flex flex-col h-[calc(100vh-170px)] overflow-y-auto p-5 space-y-6 shadow-sm">
+      <div className="xl:col-span-2 bg-white border border-slate-200 rounded-2xl flex flex-col min-h-[60vh] xl:h-[calc(100vh-170px)] overflow-y-auto p-5 space-y-6 shadow-sm">
         
         {/* Cockpit header */}
         <div className="flex justify-between items-start border-b border-slate-100 pb-4">

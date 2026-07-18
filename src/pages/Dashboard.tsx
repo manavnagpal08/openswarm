@@ -182,11 +182,7 @@ export const Dashboard: React.FC = () => {
       </div>
 
       {/* ── SYSTEM STATUS BAR ── */}
-      <div style={{
-        display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12,
-        background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
-        borderRadius: 16, padding: '16px 20px', border: '1px solid #334155'
-      }}>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 p-4 md:p-5 rounded-2xl border border-slate-700 bg-gradient-to-br from-slate-900 to-slate-800">
         {[
           { label: 'Healthy', val: systemStats.healthy, icon: CheckCircle2, color: '#10b981' },
           { label: 'Warning', val: systemStats.warning, icon: AlertTriangle, color: '#f59e0b' },
@@ -209,7 +205,7 @@ export const Dashboard: React.FC = () => {
       </div>
 
       {/* ── KPI SPARKLINE CARDS ── */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: 12 }}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3">
         {kpiCards.map((kpi, idx) => {
           const Icon = kpi.icon;
           return (
@@ -262,10 +258,10 @@ export const Dashboard: React.FC = () => {
       </div>
 
       {/* ── MAIN TELEMETRY CHARTS ── */}
-      <div style={{ display: 'grid', gridTemplateColumns: '3fr 2fr', gap: 16 }}>
+      <div className="flex flex-col lg:grid lg:grid-cols-5 gap-4">
 
         {/* Chart 1: Primary Telemetry */}
-        <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 20, padding: '20px 20px 14px', boxShadow: '0 4px 24px rgba(99,102,241,0.08)' }}>
+        <div className="lg:col-span-3 bg-white border border-slate-200 rounded-2xl p-4 md:p-5 shadow-sm shadow-indigo-500/5">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
@@ -326,7 +322,7 @@ export const Dashboard: React.FC = () => {
         </div>
 
         {/* Chart 2: Utilities */}
-        <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 20, padding: '20px 20px 14px', boxShadow: '0 4px 24px rgba(236,72,153,0.06)' }}>
+        <div className="lg:col-span-2 bg-white border border-slate-200 rounded-2xl p-4 md:p-5 shadow-sm shadow-pink-500/5">
           <div style={{ marginBottom: 16 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
               <div style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#ec4899', boxShadow: '0 0 6px #ec4899' }} />
@@ -366,10 +362,10 @@ export const Dashboard: React.FC = () => {
       </div>
 
       {/* ── LIVE FEED + ALERTS + DEVICE HEALTH ── */}
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1.4fr 1.2fr', gap: 16 }}>
+      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-12 gap-4">
 
         {/* Live Feed */}
-        <div style={{ background: '#0f172a', border: '1px solid #1e293b', borderRadius: 20, padding: '18px 18px 14px', overflow: 'hidden', height: 320 }}>
+        <div className="xl:col-span-5 lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-4 overflow-hidden h-80">
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
             <div style={{ width: 7, height: 7, borderRadius: '50%', backgroundColor: '#10b981', boxShadow: '0 0 8px #10b981', animation: 'pulse 2s infinite' }} />
             <h2 style={{ fontSize: 10, fontWeight: 800, color: '#f1f5f9', textTransform: 'uppercase', letterSpacing: 1 }}>Live Activity Feed</h2>
@@ -411,7 +407,7 @@ export const Dashboard: React.FC = () => {
         </div>
 
         {/* Recent Alerts */}
-        <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 20, padding: '18px', overflow: 'hidden', height: 320 }}>
+        <div className="xl:col-span-4 bg-white border border-slate-200 rounded-2xl p-4 overflow-hidden h-80">
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
             <AlertTriangle size={13} color="#ef4444" />
             <h2 style={{ fontSize: 10, fontWeight: 800, color: '#0f172a', textTransform: 'uppercase', letterSpacing: 0.5 }}>Active Alerts</h2>
@@ -450,7 +446,7 @@ export const Dashboard: React.FC = () => {
         </div>
 
         {/* Device Health Summary */}
-        <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 20, padding: '18px', overflow: 'hidden', height: 320 }}>
+        <div className="xl:col-span-3 bg-white border border-slate-200 rounded-2xl p-4 overflow-hidden h-80">
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
             <Cpu size={13} color="#6366f1" />
             <h2 style={{ fontSize: 10, fontWeight: 800, color: '#0f172a', textTransform: 'uppercase', letterSpacing: 0.5 }}>Device Health</h2>

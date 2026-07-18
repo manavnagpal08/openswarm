@@ -40,7 +40,7 @@ export const Alerts: React.FC = () => {
           />
         </div>
 
-        <div className="flex w-full md:w-auto gap-4">
+        <div className="flex flex-col sm:flex-row w-full md:w-auto gap-4">
           <div className="flex items-center gap-2">
             <span className="text-[10px] uppercase font-bold text-slate-400 flex items-center gap-1.5"><Filter size={12} /> Severity</span>
             <select
