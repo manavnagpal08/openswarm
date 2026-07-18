@@ -12,6 +12,7 @@ import {
 interface SidebarProps {
   collapsed: boolean;
   setCollapsed: (v: boolean) => void;
+  closeMobile?: () => void;
 }
 
 const NAV_GROUPS = [
@@ -50,7 +51,8 @@ const NavItem: React.FC<{
   collapsed: boolean;
   badge?: number;
   index: number;
-}> = ({ item, isActive, collapsed, badge = 0, index }) => {
+  closeMobile?: () => void;
+}> = ({ item, isActive, collapsed, badge = 0, index, closeMobile }) => {
   const Icon = item.icon;
   const [ripple, setRipple] = useState<{ x: number; y: number; id: number } | null>(null);
   const [hovered, setHovered] = useState(false);
@@ -58,6 +60,7 @@ const NavItem: React.FC<{
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     setRipple({ x: e.clientX - rect.left, y: e.clientY - rect.top, id: Date.now() });
+    if (closeMobile) closeMobile();
     setTimeout(() => setRipple(null), 600);
   };
 
@@ -331,7 +334,7 @@ const StatusStrip: React.FC<{ criticalCount: number; healthy: number; total: num
 };
 
 // ── Main Sidebar ─────────────────────────────────────────────────────────────
-export const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed, closeMobile }) => {
   const location = useLocation();
   const { alerts, systemStats } = useSimulation();
   const criticalCount = alerts.filter(a => a.severity === 'critical' && a.status === 'active').length;
@@ -469,6 +472,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => 
                   collapsed={collapsed}
                   badge={getBadge(item.path)}
                   index={idx}
+                  closeMobile={closeMobile}
                 />
               );
             })}

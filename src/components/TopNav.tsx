@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useSimulation } from '../context/SimulationContext';
 import { useNavigate } from 'react-router-dom';
-import { Search, Bell, Sun, Sparkles, AlertTriangle, CalendarRange, User, LogOut, Settings as SettingsIcon } from 'lucide-react';
+import { Search, Bell, Sun, Sparkles, AlertTriangle, CalendarRange, User, LogOut, Settings as SettingsIcon, Menu } from 'lucide-react';
 
-export const TopNav: React.FC = () => {
+interface TopNavProps {
+  toggleMobileMenu?: () => void;
+}
+
+export const TopNav: React.FC<TopNavProps> = ({ toggleMobileMenu }) => {
   const navigate = useNavigate();
   const { alerts, tickets, machines, systemStats } = useSimulation();
   const [time, setTime] = useState(new Date());
@@ -68,9 +72,21 @@ export const TopNav: React.FC = () => {
   const allNotifications = [...criticalNotifications, ...plannerNotifications, ...aiRecommendations];
 
   return (
-    <header className="bg-white border-b border-slate-200 h-16 px-6 flex items-center justify-between sticky top-0 z-20">
+    <header className="bg-white border-b border-slate-200 h-16 px-4 lg:px-6 flex items-center justify-between sticky top-0 z-20">
+      
+      {/* Mobile Menu Button */}
+      <div className="flex items-center gap-3 lg:hidden">
+        <button 
+          onClick={toggleMobileMenu}
+          className="p-2 -ml-2 text-slate-500 hover:bg-slate-100 rounded-lg transition-colors"
+        >
+          <Menu size={20} />
+        </button>
+        {/* Shortened brand name for mobile if needed */}
+      </div>
+
       {/* Global Search Bar */}
-      <div className="hidden md:flex items-center gap-2.5 w-96 relative">
+      <div className="hidden lg:flex items-center gap-2.5 w-96 relative">
         <Search className="absolute left-3 text-slate-400" size={16} />
         <input
           type="text"
